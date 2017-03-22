@@ -1,0 +1,34 @@
+{
+  "name": "notebook",
+  "version": "1.0.0",
+  "description": "网络日记本",
+  "main": "index.js",
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "mime": "^1.3.4",
+    "mongodb": "^2.2.25",
+    "simplemde": "^1.11.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/DoctypeMufan/notebook.git"
+  },
+  "keywords": [
+    "notebook"
+  ],
+  "author": "木凡",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DoctypeMufan/notebook/issues"
+  },
+  "homepage": "https://github.com/DoctypeMufan/notebook#readme"
+}
