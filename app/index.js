@@ -3,6 +3,9 @@
 const fs = require('fs')
 const path = require('path')
 const staticServer = require('./staic-server')
+const apiServer = require('./api')
+const urlParser = require('./url-parser')
+
 class App{
 	  constructor(){
 
@@ -10,32 +13,37 @@ class App{
 	  initServer(){
         //初始化的工作
 	  	return (request,response)=>{
-            let {url} = request;//==>解构赋值
-            //每个请求逻辑,根据url进行代码分发
-           //  if(url == '/css/index.css'){
-           //      fs.readFile('./public/css/index.css','utf-8',(error,data)=>{
-           //           response.end(data)                
-           //      })
-           // };
-             
-           //   if(url == '/js/index.js'){
-           //      fs.readFile('./public/js/index.js','utf-8',(error,data)=>{
-           //           response.end(data)                
-           //      })
-           // };
-
-           //   if(url == '/') {      
-           //  	fs.readFile('./public/index.html','utf-8',(error,data)=>{
-	  		      //    response.end(data)
-           //      })
-           // };  
-        //express框架 app.use(static('public'))绝对路径
-        let body = staticServer(url)
-        response.end(body)
-
-
-
-
+            let {url,method} = request;//==>解构赋值 let url = request.url
+        //返回的字符串或者buffer
+        request.context={
+            body:'',
+            query:{},
+            method:'get'
+        }
+        urlParser(request).then(()=>{
+           return apiServer(request)
+        }).then(val=>{
+          if(!val){
+              //Promise
+              return staticServer(request)
+          }else{
+              return val
+          }
+        }).then(val=>{
+          //数组
+          let base = {'X-powered-by':'Node.js'}
+          let body = ''
+          if(val instanceof Buffer){
+              body = val
+          }else{
+              body = JSON.stringify(val)
+              let fianlHeader = Object.assign(base,{
+                  'Content-Type':'application/json'
+              })          
+              response.writeHead(200,'resolve ok',fianlHeader) 
+          }
+            response.end(body)
+        })          
         }
     }
 } 
